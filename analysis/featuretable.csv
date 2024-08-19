@@ -1,0 +1,11 @@
+,node_ID,Region,feature,segment_num,CN,eMCI
+1,70,Parietal,deg,2,17.029,15.727
+2,107,Cerebellum,betw,3,79.675,83.258
+3,6,Frontal,clustcoef,3,0.413,0.427
+4,73,Frontal,clustcoef,3,0.396,0.439
+5,6,Frontal,localeff,3,0.675,0.690
+6,97,Cerebellum,shorpath,3,3.943,6.030
+7,73,Frontal,localeff,3,0.667,0.663
+8,57,Occipital,betw,1,86.251,80.899
+9,83,Temporal,betw,3,70.976,57.667
+10,111,Cerebellum,shorpath,3,5.286,10.061

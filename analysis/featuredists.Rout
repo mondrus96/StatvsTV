@@ -1,0 +1,253 @@
+
+R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Script is for comparing features
+> # Define a function for extracting the distance between adjacent time windows
+> adjdist = function(dists){
++   # Convert to matrix and get off-diagonals
++   dists = as.matrix(dists)
++   dists = mean(dists[row(dists) == (col(dists) - 1)])
++   
++   # Return output
++   return(dists)
++ }
+> 
+> # Load all the functions
+> filesrcs = list.files(path = "../functions", pattern="*.R$")
+> sapply(paste0("../functions/", filesrcs), source)
+Loading required package: pkgmaker
+Loading required package: registry
+Loading required package: rngtools
+Loading required package: cluster
+NMF - BioConductor layer [OK] | Shared memory capabilities [OK] | Cores 47/48
+Loading required package: ggplot2
+Loading required package: lattice
+
+Attaching package: ‘igraph’
+
+The following objects are masked from ‘package:NMF’:
+
+    algorithm, compare
+
+The following objects are masked from ‘package:BiocGenerics’:
+
+    normalize, path, union
+
+The following objects are masked from ‘package:stats’:
+
+    decompose, spectrum
+
+The following object is masked from ‘package:base’:
+
+    union
+
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: Matrix
+Loaded glmnet 4.1-3
+Registered S3 methods overwritten by 'proxy':
+  method               from    
+  print.registry_field registry
+  print.registry_entry registry
+randomForest 4.6-14
+Type rfNews() to see new features/changes/bug fixes.
+
+Attaching package: ‘randomForest’
+
+The following object is masked from ‘package:ggplot2’:
+
+    margin
+
+The following object is masked from ‘package:Biobase’:
+
+    combine
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    combine
+
+        ../functions/concat.subj.R ../functions/concat.windows.R
+value   ?                          ?                            
+visible FALSE                      FALSE                        
+        ../functions/est.FC.R ../functions/eval.CV.R ../functions/graph.stats.R
+value   ?                     ?                      ?                         
+visible FALSE                 FALSE                  FALSE                     
+        ../functions/HELPER.est.FC.R ../functions/run.classifiers.R
+value   ?                            ?                             
+visible FALSE                        FALSE                         
+        ../functions/smpl.size.R ../functions/train.models.R
+value   ?                        ?                          
+visible FALSE                    FALSE                      
+        ../functions/train.test.CV.R ../functions/tune.hyperparams.R
+value   ?                            ?                              
+visible FALSE                        FALSE                          
+Warning messages:
+1: package ‘igraph’ was built under R version 4.1.0 
+2: package ‘DirectedClustering’ was built under R version 4.1.0 
+> # Load the data
+> load("../data/ADNI/ADNIlist.rda")
+> 
+> ### 1 - Changepoint Detection with two CPs ###
+> # Estimate networks and graphs
+> FCdata = est.FC(ADNIlist, 2)
+> FCdata[,grepl("_", colnames(FCdata))] = 1*(abs(FCdata[,grepl("_", colnames(FCdata))]) > 0.5)
+> FCdata = cbind(FCdata[,!grepl("_", colnames(FCdata))],
++                graph.stats(FCdata[,grepl("_", colnames(FCdata))], "all"))
+> # Separate by class
+> cpDFCdist = split(FCdata, FCdata$subj)
+> # Find the average distance across adjacent time windows
+> cpDFCdist = lapply(cpDFCdist, dist)
+> cpDFCdist = sapply(cpDFCdist, adjdist)
+> 
+> ### 2 - Window based DFC ###
+> # Loop through all possible combinations
+> wsize = seq(10, 70, 5)
+> wstep = c(1, 2, 3, 5, 8, 10, 15, 20)
+> grid = expand.grid(wsize, wstep)
+> allwDFCdist = vector(mode = "list", nrow(grid))
+> # Loop grid variable
+> for(i in 1:nrow(grid)){
++   # Print current step
++   print(paste0("window", grid[i,1], "step", grid[i,2]))
++   
++   # Estimate networks/graphs using windows
++   FCdata = est.FC(ADNIlist, alpha = unlist(grid[i,]))
++   FCdata[,grepl("_", colnames(FCdata))] = 1*(abs(FCdata[,grepl("_", colnames(FCdata))]) > 0.5)
++   FCdata = cbind(FCdata[,!grepl("_", colnames(FCdata))],
++                  graph.stats(FCdata[,grepl("_", colnames(FCdata))], "all"))
++   # Separate by subject
++   wDFCdist = split(FCdata[,-(1:3)], FCdata$subj)
++   # Find the average distance across adjacent time windows
++   wDFCdist = lapply(wDFCdist, dist)
++   wDFCdist = sapply(wDFCdist, adjdist)
++   # Append to dataframe
++   allwDFCdist[[i]] = wDFCdist
++   names(allwDFCdist)[i] = paste0("win", grid[i,1], "step", grid[i,2])
++ }
+[1] "window10step1"
+[1] "window15step1"
+[1] "window20step1"
+[1] "window25step1"
+[1] "window30step1"
+[1] "window35step1"
+[1] "window40step1"
+[1] "window45step1"
+[1] "window50step1"
+[1] "window55step1"
+[1] "window60step1"
+[1] "window65step1"
+[1] "window70step1"
+[1] "window10step2"
+[1] "window15step2"
+[1] "window20step2"
+[1] "window25step2"
+[1] "window30step2"
+[1] "window35step2"
+[1] "window40step2"
+[1] "window45step2"
+[1] "window50step2"
+[1] "window55step2"
+[1] "window60step2"
+[1] "window65step2"
+[1] "window70step2"
+[1] "window10step3"
+[1] "window15step3"
+[1] "window20step3"
+[1] "window25step3"
+[1] "window30step3"
+[1] "window35step3"
+[1] "window40step3"
+[1] "window45step3"
+[1] "window50step3"
+[1] "window55step3"
+[1] "window60step3"
+[1] "window65step3"
+[1] "window70step3"
+[1] "window10step5"
+[1] "window15step5"
+[1] "window20step5"
+[1] "window25step5"
+[1] "window30step5"
+[1] "window35step5"
+[1] "window40step5"
+[1] "window45step5"
+[1] "window50step5"
+[1] "window55step5"
+[1] "window60step5"
+[1] "window65step5"
+[1] "window70step5"
+[1] "window10step8"
+[1] "window15step8"
+[1] "window20step8"
+[1] "window25step8"
+[1] "window30step8"
+[1] "window35step8"
+[1] "window40step8"
+[1] "window45step8"
+[1] "window50step8"
+[1] "window55step8"
+[1] "window60step8"
+[1] "window65step8"
+[1] "window70step8"
+[1] "window10step10"
+[1] "window15step10"
+[1] "window20step10"
+[1] "window25step10"
+[1] "window30step10"
+[1] "window35step10"
+[1] "window40step10"
+[1] "window45step10"
+[1] "window50step10"
+[1] "window55step10"
+[1] "window60step10"
+[1] "window65step10"
+[1] "window70step10"
+[1] "window10step15"
+[1] "window15step15"
+[1] "window20step15"
+[1] "window25step15"
+[1] "window30step15"
+[1] "window35step15"
+[1] "window40step15"
+[1] "window45step15"
+[1] "window50step15"
+[1] "window55step15"
+[1] "window60step15"
+[1] "window65step15"
+[1] "window70step15"
+[1] "window10step20"
+[1] "window15step20"
+[1] "window20step20"
+[1] "window25step20"
+[1] "window30step20"
+[1] "window35step20"
+[1] "window40step20"
+[1] "window45step20"
+[1] "window50step20"
+[1] "window55step20"
+[1] "window60step20"
+[1] "window65step20"
+[1] "window70step20"
+> 
+> # Save as table(s)
+> save(cpDFCdist, allwDFCdist, file = "alldist.rda")
+> 
+> proc.time()
+     user    system   elapsed 
+15762.424   460.281  8392.454 
