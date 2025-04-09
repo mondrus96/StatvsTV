@@ -18,7 +18,7 @@ We compare the best performing wDFC methods to cpDFC and SFC. cpDFC ranks at, or
 Below is a figure which shows results for change points detection from *FaBiSearch* with two change points (**FBS_cpDFC2**) and corresponding stationary segments for controls (a) and eMCI (b) in the ADNI rs-fMRI dataset. For each panel, FC plots are shown for each stationary segment, where **S<sub>1</sub>**, **S<sub>2</sub>**, **S<sub>3</sub>** correspond to the first, second, and third stationary segments. Individual change points are used to segment the time series, and then correlation matrices are averaged across subjects. The top 100 edges as determined by the absolute value of this averaged correlation are shown for each stationary segment. Below the FC plots, the first two change points detected across all subjects are shown.
 
 <p align="center">
-    <img src="images/allsegments.png" alt="Change point detection via FaBiSearch results" style="width:50%;">
+    <img src="images/allsegments.png" alt="Change point detection via FaBiSearch results" style="width:90%;">
 </p>
 
 In the figure below, we show the associated regions of interest (ROIs) of features selected across all folds by SIS in leave-
@@ -29,5 +29,5 @@ from the AAL atlas, the graph theoretic feature type, the stationary segment (ie
 descending order based on how often they were selected across the LOOCV folds
 
 <p align="center">
-    <img src="images/features.png" alt="Prediction probability correlations" style="width:50%;">
+    <img src="images/features.png" alt="Prediction probability correlations" style="width:90%;">
 </p>
