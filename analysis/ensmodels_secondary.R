@@ -40,7 +40,7 @@ ggplot(data = df, aes(x = Name, y = Accuracy)) +
   geom_point(size = 3, color = "#0f7ab5") +
   geom_ribbon(aes(ymin = Accuracy - AccSE, ymax = Accuracy + AccSE, group = 1), fill = "#0f7ab5", alpha = 0.2) +
   geom_line(aes(group = 1), color = "#0f7ab5") +
-  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.5, 1), oob = rescale_none) +
+  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.4, 1), oob = rescale_none) +
   custom_theme +
   xlab("")
 dev.off()
@@ -52,7 +52,7 @@ ggplot(data = df, aes(x = Name, y = Sensitivity)) +
   geom_point(size = 3, color = "#0f7ab5") +
   geom_ribbon(aes(ymin = Sensitivity - SenSE, ymax = Sensitivity + SenSE, group = 1), fill = "#0f7ab5", alpha = 0.2) +
   geom_line(aes(group = 1), color = "#0f7ab5") +
-  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.5, 1), oob = rescale_none) +
+  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.4, 1), oob = rescale_none) +
   custom_theme +
   xlab("")
 dev.off()
@@ -64,7 +64,7 @@ ggplot(data = df, aes(x = Name, y = Specificity)) +
   geom_point(size = 3, color = "#0f7ab5") +
   geom_ribbon(aes(ymin = Specificity - SpeSE, ymax = Specificity + SpeSE, group = 1), fill = "#0f7ab5", alpha = 0.2) +
   geom_line(aes(group = 1), color = "#0f7ab5") +
-  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.5, 1), oob = rescale_none) +
+  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.4, 1), oob = rescale_none) +
   custom_theme +
   xlab("")
 dev.off()
@@ -76,7 +76,7 @@ ggplot(data = df, aes(x = Name, y = F1)) +
   geom_point(size = 3, color = "#0f7ab5") +
   geom_ribbon(aes(ymin = F1 - F1SE, ymax = F1 + F1SE, group = 1), fill = "#0f7ab5", alpha = 0.2) +
   geom_line(aes(group = 1), color = "#0f7ab5") +
-  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.5, 1), oob = rescale_none) +
+  scale_y_continuous(breaks = seq(0.5, 1, 0.1), limits = c(0.4, 1), oob = rescale_none) +
   custom_theme +
   xlab("")
 dev.off()

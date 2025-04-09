@@ -15,7 +15,19 @@ We compare the best performing wDFC methods to cpDFC and SFC. cpDFC ranks at, or
     <img src="images/resultsall.png" alt="All results" style="width:70%;">
 </p>
 
-Furthermore we elucidate the relationship between predictions from wDFC and cpDFC. The plot below shows the correlations between the best classifiers as determined by F1 score, where 1 is cpDFC and the remaining are the best wDFC. The lack of strong correlation between cpDFC and varying step and window sized wDFC suggests the underlying functional networks are dynamic, multi-scale and that different FC methods capture varying amounts of information for classification efficacy.
+Below is a figure which shows results for change points detection from *FaBiSearch* with two change points (**FBS_cpDFC2**) and corresponding stationary segments for controls (a) and eMCI (b) in the ADNI rs-fMRI dataset. For each panel, FC plots are shown for each stationary segment, where **S<sub>1</sub>**, **S<sub>2</sub>**, **S<sub>3</sub>** correspond to the first, second, and third stationary segments. Individual change points are used to segment the time series, and then correlation matrices are averaged across subjects. The top 100 edges as determined by the absolute value of this averaged correlation are shown for each stationary segment. Below the FC plots, the first two change points detected across all subjects are shown.
+
 <p align="center">
-    <img src="images/predcorrs.png" alt="Prediction probability correlations" style="width:50%;">
+    <img src="images/allsegments.png" alt="Change point detection via FaBiSearch results" style="width:50%;">
+</p>
+
+In the figure below, we show the associated regions of interest (ROIs) of features selected across all folds by SIS in leave-
+one-out cross validation for cpDFC2 in the classification study of CN subjects and subjects with eMCI from
+the ADNI rs-fMRI dataset (Left). The node ID, number of LOOCV folds the feature was chosen, region
+from the AAL atlas, the graph theoretic feature type, the stationary segment (ie., 1 = first, 2 = second,
+3 = third), and the mean values of the features of the CN and eMCI groups (Right). The features are ordered in
+descending order based on how often they were selected across the LOOCV folds
+
+<p align="center">
+    <img src="images/features.png" alt="Prediction probability correlations" style="width:50%;">
 </p>

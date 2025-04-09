@@ -64,6 +64,7 @@ base_size = 15
 png("wDFC.png", width = 8, height = 5, units = "in", res = 120, pointsize = 10)
 ggplot(df, aes(x = wDFC)) +
   geom_histogram(binwidth = 0.05, fill = "#0f7ab5", color = "black") +
+  geom_vline(aes(xintercept = mean(df[,1])), color = "#c6475b") +
   labs(x = "Accuracy", y = "Count", title = "Distribution of wDFC Accuracies (ADNI)") +
   theme_minimal() +
   theme(
